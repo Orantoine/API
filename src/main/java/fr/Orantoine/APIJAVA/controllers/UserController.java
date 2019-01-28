@@ -3,12 +3,9 @@ package fr.Orantoine.APIJAVA.controllers;
 
 import fr.Orantoine.APIJAVA.models.User;
 import fr.Orantoine.APIJAVA.repositories.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,10 @@ public class UserController {
         System.out.println(newUser.toString());
         userRepository.save(newUser);
         return newUser;
+    }
+
+    @GetMapping(path = "/{id}")
+    public User findById(@PathVariable String id){
+        return userRepository.findById(id).orElse(null);
     }
 }
