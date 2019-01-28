@@ -3,6 +3,7 @@ package fr.Orantoine.APIJAVA.controllers;
 
 import fr.Orantoine.APIJAVA.models.User;
 import fr.Orantoine.APIJAVA.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(path = "/users")
 public class UserController {
 
     @Autowired
@@ -46,6 +48,5 @@ public class UserController {
         System.out.println("Suppresion en cours");
         userRepository.deleteById(id);
     }
-
 
 }
