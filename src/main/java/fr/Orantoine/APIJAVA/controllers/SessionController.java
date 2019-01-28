@@ -47,7 +47,7 @@ public class SessionController {
         session.setToken(token);
         session.setCreation(dateactu);
         session.setExpirement(expiration);
-        session.setIdUser(user1.getId());
+        session.setUser(user1);
         sessionRepository.save(session);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("token",session.token);

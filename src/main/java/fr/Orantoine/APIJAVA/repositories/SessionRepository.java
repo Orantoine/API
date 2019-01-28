@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface SessionRepository extends MongoRepository<Session,String> {
 
+    boolean existsByTokenAndExpirementDayBefore(Date day);
+    Session findByToken(String token);
 }

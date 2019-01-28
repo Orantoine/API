@@ -48,5 +48,4 @@ public class UserController {
         System.out.println("Suppresion en cours");
         userRepository.deleteById(id);
     }
-
 }

@@ -16,14 +16,14 @@ public class Session {
 
     public Date expirement;
 
-    public String idUser;
+    public User user;
 
-    public Session(String id, String token, Date creation, Date expirement,String idUser) {
+    public Session(String id, String token, Date creation, Date expirement,User user) {
         this.id = id;
         this.token = token;
         this.creation = creation;
         this.expirement = expirement;
-        this.idUser = idUser;
+        this.user = user;
     }
 
     public Session() {
@@ -61,12 +61,12 @@ public class Session {
         this.expirement = expirement;
     }
 
-    public String getIdUser(){
-        return idUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Session {
                 ", token='" + token + '\'' +
                 ", creation=" + creation +
                 ", expirement=" + expirement +
-                ", idUser=" + idUser+
+                ", user=" + user +
                 '}';
     }
 }
