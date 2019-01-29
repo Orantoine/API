@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -57,8 +58,16 @@ public class SessionController {
     }
 
     @GetMapping(path = "/sessions")
-    public List<Session> listSession(){
-        return sessionRepository.findAll();
+    public ResponseEntity<List<Session>> listSession(@RequestHeader String token){
+        Date date = new Date();
+        Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token,date);
+        if(session != null) {
+            User user = session.getUser();
+            if (user != null && user.isAdmin()) {
+                return ResponseEntity.ok().body(sessionRepository.findAll());
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
