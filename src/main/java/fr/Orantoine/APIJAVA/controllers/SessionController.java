@@ -62,10 +62,8 @@ public class SessionController {
         Date date = new Date();
         Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token,date);
         if(session != null) {
-            User user = session.getUser();
-            if (user != null && user.isAdmin()) {
+            if(session.getUser().isAdmin())
                 return ResponseEntity.ok().body(sessionRepository.findAll());
-            }
         }
         return ResponseEntity.notFound().build();
     }
