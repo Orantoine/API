@@ -5,7 +5,6 @@ import fr.Orantoine.APIJAVA.models.Session;
 import fr.Orantoine.APIJAVA.models.User;
 import fr.Orantoine.APIJAVA.repositories.SessionRepository;
 import fr.Orantoine.APIJAVA.repositories.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

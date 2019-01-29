@@ -1,23 +1,18 @@
 package fr.Orantoine.APIJAVA.controllers;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import fr.Orantoine.APIJAVA.models.Session;
 import fr.Orantoine.APIJAVA.models.User;
 import fr.Orantoine.APIJAVA.repositories.SessionRepository;
 import fr.Orantoine.APIJAVA.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/authent")
