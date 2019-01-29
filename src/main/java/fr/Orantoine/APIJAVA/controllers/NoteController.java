@@ -28,19 +28,25 @@ public class NoteController {
 
     @GetMapping(path = "/")
     public ResponseEntity<List<Notes>> listNotes(){
-        return ResponseEntity.ok().body(noteRepository.findAll());
+        return ResponseEntity.ok(noteRepository.findAll());
     }
 
     @PostMapping(path = "/")
-    public Notes addNote(@RequestBody Notes notes,@RequestHeader String token){
+    public ResponseEntity<Notes> addNote(@RequestBody Notes notes,@RequestHeader String token){
         Date date = new Date();
         Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token,date);
         if(session!= null) {
             notes.setUser(session.getUser());
             notes.setDate(date);
             noteRepository.save(notes);
-            return notes;
+            return ResponseEntity.ok(notes);
         }
-        return null;
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteNote(@PathVariable String id){
+        noteRepository.deleteById(id);
+        return ResponseEntity.ok().body("Note supprimé avec succés");
     }
 }

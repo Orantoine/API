@@ -1,13 +1,16 @@
 package fr.Orantoine.APIJAVA.controllers;
 
 
+import fr.Orantoine.APIJAVA.models.Session;
 import fr.Orantoine.APIJAVA.models.User;
+import fr.Orantoine.APIJAVA.repositories.SessionRepository;
 import fr.Orantoine.APIJAVA.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SessionRepository sessionRepository;
 
     @GetMapping(path = "/")
     public List<User> listUsers(){
@@ -44,8 +50,12 @@ public class UserController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteUser(@PathVariable String id){
-        System.out.println("Suppresion en cours");
-        userRepository.deleteById(id);
+    public void deleteUser(@PathVariable String id, @RequestHeader String token){
+        Date date = new Date();
+        Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token,date);
+        if(session != null) {
+            if (session.getUser().isAdmin())
+                userRepository.deleteById(id);
+        }
     }
 }

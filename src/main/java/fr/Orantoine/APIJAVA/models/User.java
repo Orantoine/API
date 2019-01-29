@@ -1,23 +1,24 @@
 package fr.Orantoine.APIJAVA.models;
 
+
 import org.springframework.data.annotation.Id;
 
 public class User {
 
     @Id
-    public String id;
+    private String id;
 
-    public String firstName;
+    private String firstName;
 
-    public String lastName;
+    private String lastName;
 
-    public int year;
+    private int year;
 
-    public String pseudo;
+    private String pseudo;
 
-    public String password;
+    private String password;
 
-    public boolean admin;
+    private boolean admin;
 
 
     public User(String id, String firstName, String lastName, int year, String pseudo, String password, boolean admin) {

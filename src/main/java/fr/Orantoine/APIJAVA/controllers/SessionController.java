@@ -31,41 +31,48 @@ public class SessionController {
 
     @GetMapping(path = "/")
     public ResponseEntity<String> authent(@RequestBody User user){
-        User user1 = userRepository.findByPseudoAndPassword(user.pseudo, user.password);
+        User user1 = userRepository.findByPseudoAndPassword(user.getPseudo(), user.getPassword());
         if(user1 == null){
             return ResponseEntity.notFound().build();
         }
         Date dateactu = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateactu);
-        calendar.add(Calendar.DATE,2);
+        calendar.add(Calendar.MINUTE,1); //temps d'expiration d'une session 2 heures
         Date expiration = calendar.getTime();
-        SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[128];
-        random.nextBytes(bytes);
-        String token = bytes.toString();
-        Session session = new Session();
-        session.setToken(token);
-        session.setCreation(dateactu);
-        session.setExpirement(expiration);
-        session.setUser(user1);
-        sessionRepository.save(session);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("token",session.token);
-
-        return ResponseEntity.ok().headers(responseHeaders).body("{" +
-                "\"message\": \"Vous êtes bien connecté\" }");
+        Session sessions = sessionRepository.findSessionByUserAndExpirementIsAfter(user1,dateactu);
+        if(sessions == null){
+            SecureRandom random = new SecureRandom();
+            byte bytes[] = new byte[128];
+            random.nextBytes(bytes);
+            String token = bytes.toString();
+            Session session = new Session();
+            session.setToken(token);
+            session.setCreation(dateactu);
+            session.setExpirement(expiration);
+            session.setUser(user1);
+            sessionRepository.save(session);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("token",session.getToken());
+            return ResponseEntity.ok().headers(responseHeaders).body("{" +
+                    "\"message\": \"Vous êtes bien connecté\" }");
+        }
+        else{
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("token",sessions.getToken());
+            return ResponseEntity.ok().headers(responseHeaders).body("{" +
+                    "\"message\": \"Bon retour parmis nous\" }");
+        }
     }
 
     @GetMapping(path = "/sessions")
-    public ResponseEntity<List<Session>> listSession(@RequestHeader String token){
+    public ResponseEntity<List<Session>> listSession(@RequestHeader String token) {
         Date date = new Date();
-        Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token,date);
-        if(session != null) {
-            if(session.getUser().isAdmin())
+        Session session = sessionRepository.findSessionByTokenAndExpirementIsAfter(token, date);
+        if (session != null){
+            if (session.getUser().isAdmin())
                 return ResponseEntity.ok().body(sessionRepository.findAll());
         }
         return ResponseEntity.notFound().build();
     }
-
 }
